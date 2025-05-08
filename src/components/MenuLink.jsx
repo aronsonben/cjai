@@ -1,6 +1,6 @@
 import { motion } from "motion/react"
 
-export const MenuLink = ({ text, href, onClick }) => {
+export const MenuLink = ({ text, href, onClick, delay }) => {
   return (
     <motion.a
       href={href}
@@ -16,8 +16,12 @@ export const MenuLink = ({ text, href, onClick }) => {
       }}
       whileHover="hover"
       initial="initial"
+      animate={{ opacity: 1, x: 0 }}
+      transition={{type: "spring", duration: 2, bounce: 0, delay: delay}}
       variants={{
         initial: {
+          opacity: 0,
+          x: -50,
           backgroundSize: '0% 4px',
           backgroundPosition: '0 100%'
         },

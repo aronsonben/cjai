@@ -7,6 +7,13 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Hoper Begin';
+  src: url('./assets/fonts/HoperBegin.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .bebas-neue-regular {
   font-family: "Bebas Neue", sans-serif;
   font-weight: 400;

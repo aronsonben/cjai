@@ -16,7 +16,7 @@ export const YouTubeEmbed = ({ isPlaying, setIsPlaying }) => {
     />
   ) : (
     <motion.div 
-      className="w-full aspect-video relative cursor-pointer rounded-[30px]"
+      className="w-full h-full md:h-auto aspect-video relative cursor-pointer rounded-[30px]"
       onClick={() => setIsPlaying(true)}
       initial={{ opacity: 0 }} 
       animate={{ opacity: 1 }}
