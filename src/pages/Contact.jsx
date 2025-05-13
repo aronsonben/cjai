@@ -49,7 +49,7 @@ export default function Contact({ onBack }) {
         </div>
       </div>
       <div id="contact-form" className="flex flex-col items-center justify-center gap-4 p-4 md:px-8 md:py-4 w-full">
-        <div id="mc_embed_shell">
+        <div id="mc_embed_shell" className="flex flex-col items-center justify-center gap-4 max-w-screen">
           <link
             href="//cdn-images.mailchimp.com/embedcode/classic-061523.css"
             rel="stylesheet"
@@ -66,6 +66,7 @@ export default function Contact({ onBack }) {
                 clear: left;
                 font: 14px Helvetica, Arial, sans-serif;
                 width: 600px;
+                max-width: 90%;
               }
             `}
           </style>

@@ -8,6 +8,8 @@ import Contact from './pages/Contact'
 import { YouTubeEmbed } from "./components/YouTubeEmbed";
 import { MenuLink } from "./components/MenuLink";
 import headerfont2 from './assets/cjai_headerfont-retrocursive2.2.png'
+import headerfontOG from './assets/cjai_original_font.png'
+import headerfontOGorange from './assets/cjai_original_font_org.png'
 import './App.css'
 
 
@@ -175,7 +177,7 @@ function App() {
       {/* Header Section */}
       <header className="w-full flex justify-center items-center p-4 pt-8 md:justify-start md:p-8">
         <div className="flex justify-center md:justify-start" ref={containerRef}>
-        <motion.h1
+        {/* <motion.h1
           id="cjai-brand-text"
           className="!text-[84px] md:!text-[84px]"
           style={{ 
@@ -188,7 +190,7 @@ function App() {
           whileTap={{ scale: 0.95 }}
           >
             C.Jai
-          </motion.h1>
+          </motion.h1> */}
           {/* <motion.svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 100 20"
@@ -207,6 +209,14 @@ function App() {
               style={shape}
             />
           </motion.svg> */}
+          <motion.img 
+            src={headerfontOGorange} 
+            alt="C.Jai Header" 
+            className="max-h-20 md:max-h-20" 
+            onClick={() => setCurrentView("home")}
+            whileHover={{ scale: 1.05, transition: { duration: 0.3 }, cursor: "pointer" }}
+            whileTap={{ scale: 0.95 }}
+          />
         </div>
       </header>
       
