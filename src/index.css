@@ -8,6 +8,13 @@
 }
 
 @font-face {
+  font-family: 'Palatino';
+  src: url('./assets/fonts/Palatino.ttc') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'Hoper Begin';
   src: url('./assets/fonts/HoperBegin.otf') format('opentype');
   font-weight: normal;

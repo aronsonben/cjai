@@ -3,12 +3,12 @@ import { useState } from "react";
 import { Play } from "lucide-react";
 import cjaibw from '../assets/cjai_bw_keys.png'
 
-export const YouTubeEmbed = ({ isPlaying, setIsPlaying }) => {
+export const YouTubeEmbed = ({ source, isPlaying, setIsPlaying }) => {
 
   return isPlaying ? (
     <iframe 
       className="w-full aspect-video rounded-lg"
-      src="https://www.youtube.com/embed/mbGDDGKc7Eg?si=0gZhBQ8kSms3jtmY&autoplay=1"
+      src={source}
       title="CJai YouTube Embed"
       allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share"
       referrerPolicy="strict-origin-when-cross-origin"

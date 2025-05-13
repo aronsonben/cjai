@@ -2,13 +2,14 @@ import { useState, useEffect, useRef } from "react"
 import { motion, animate, stagger } from "motion/react"
 import { splitText } from "motion-plus"
 import textured from './assets/textured_bkg_green.png'
-import Home from "./pages/Home";
 import Music from './pages/Music'
 import Contact from './pages/Contact'
+import EPK from './pages/EPK'
 import { YouTubeEmbed } from "./components/YouTubeEmbed";
 import { MenuLink } from "./components/MenuLink";
 import headerfont2 from './assets/cjai_headerfont-retrocursive2.2.png'
 import headerfontOG from './assets/cjai_original_font.png'
+import handdrawnfont from './assets/cjai_handdrawn_font.png'
 import headerfontOGorange from './assets/cjai_original_font_org.png'
 import './App.css'
 
@@ -175,51 +176,53 @@ function App() {
       }}
     >
       {/* Header Section */}
-      <header className="w-full flex justify-center items-center p-4 pt-8 md:justify-start md:p-8">
-        <div className="flex justify-center md:justify-start" ref={containerRef}>
-        {/* <motion.h1
-          id="cjai-brand-text"
-          className="!text-[84px] md:!text-[84px]"
-          style={{ 
-            fontFamily: 'Hoper Begin',
-            color: '#E6E5DB',
-            letterSpacing: '0.1em',
-            filter: 'drop-shadow(4px 4px 1px #D8572A)' 
-          }}
-          whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
-          whileTap={{ scale: 0.95 }}
-          >
-            C.Jai
-          </motion.h1> */}
-          {/* <motion.svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 100 20"
-            className="absolute w-[25%] top-[15%] left-[57%] md:absolute md:w-[10%] md:top-[12%] md:left-[21%] squiggly-line"
-            initial="hidden"
-            animate="visible"
-          >
-            <motion.path
-              d="M0 10 Q 25 0, 50 10 T 100 10"
-              fill="transparent"
-              stroke="#D8572A"
-              strokeWidth="2"
-              strokeLinecap="round"
-              variants={draw}
-              custom={1}
-              style={shape}
-            />
-          </motion.svg> */}
-          <motion.img 
-            src={headerfontOGorange} 
-            alt="C.Jai Header" 
-            className="max-h-20 md:max-h-20" 
-            onClick={() => setCurrentView("home")}
-            whileHover={{ scale: 1.05, transition: { duration: 0.3 }, cursor: "pointer" }}
+      {currentView != "epk" && (
+        <header className="w-full flex justify-center items-center p-4 pt-8 md:justify-start md:p-8">
+          <div className="flex justify-center md:justify-start" ref={containerRef}>
+          {/* <motion.h1
+            id="cjai-brand-text"
+            className="!text-[84px] md:!text-[84px]"
+            style={{ 
+              fontFamily: 'Hoper Begin',
+              color: '#E6E5DB',
+              letterSpacing: '0.1em',
+              filter: 'drop-shadow(4px 4px 1px #D8572A)' 
+            }}
+            whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
             whileTap={{ scale: 0.95 }}
-          />
-        </div>
-      </header>
-      
+            >
+              C.Jai
+            </motion.h1> */}
+            {/* <motion.svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 100 20"
+              className="absolute w-[25%] top-[15%] left-[57%] md:absolute md:w-[10%] md:top-[12%] md:left-[21%] squiggly-line"
+              initial="hidden"
+              animate="visible"
+            >
+              <motion.path
+                d="M0 10 Q 25 0, 50 10 T 100 10"
+                fill="transparent"
+                stroke="#D8572A"
+                strokeWidth="2"
+                strokeLinecap="round"
+                variants={draw}
+                custom={1}
+                style={shape}
+              />
+            </motion.svg> */}
+            <motion.img 
+              src={handdrawnfont} 
+              alt="C.Jai Header" 
+              className="max-h-20 md:max-h-20" 
+              onClick={() => setCurrentView("home")}
+              whileHover={{ scale: 1.05, transition: { duration: 0.3 }, cursor: "pointer" }}
+              whileTap={{ scale: 0.95 }}
+            />
+          </div>
+        </header>
+      )}
+
       {/* Content Section */}
       <main className="flex-1 w-full overflow-auto">
         {currentView === "home" ? (
@@ -229,7 +232,7 @@ function App() {
               className="flex-1/2 flex flex-col justify-center items-center gap-8 text-4xl"
             >
               <MenuLink text="Music" onClick={() => setCurrentView("music")} delay={0.05} />
-              <MenuLink text="EPK" href="https://erapport.club/" onClick={() => {}} delay={0.1} />
+              <MenuLink text="EPK" onClick={() => setCurrentView("epk")} delay={0.1} />
               <MenuLink text="E. Rapport" href="https://erapport.club/" onClick={() => {}} delay={0.15} />
               <MenuLink text="Contact" onClick={() => setCurrentView("contact")} delay={0.2} />
             </motion.div>
@@ -240,13 +243,15 @@ function App() {
               animate={{ opacity: 1 }}
               whileInView={{ opacity: 1 }}
             >
-              <YouTubeEmbed isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
+              <YouTubeEmbed source="https://www.youtube.com/embed/mbGDDGKc7Eg?si=0gZhBQ8kSms3jtmY&autoplay=1" isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
             </motion.div>
           </div>
         ) : currentView === "music" ? (
           <Music onBack={() => setCurrentView("home")} />
         ) : currentView === "contact" ? (
           <Contact onBack={() => setCurrentView("home")} />
+        ) : currentView === "epk" ? (
+          <EPK onBack={() => setCurrentView("home")} />
         ) : (
           <div>
             <p>Whoops!</p>
