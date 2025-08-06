@@ -17,7 +17,7 @@ export default function Home() {
       >
         <MenuLink text="Music" />
         <MenuLink text="EPK" />
-        <MenuLink text="E. Rapport" />
+        <MenuLink text="BERi" />
         <MenuLink text="Contact" />
       </motion.div>
       <motion.div 

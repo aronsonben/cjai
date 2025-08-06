@@ -8,9 +8,9 @@ import keys from '../assets/img/songart/cjai_keys.png'
 
 export default function Music({ onBack }) {
   const albums = [
-    { id: 1, title: "Highway", cover: highway, link: "https://linktr.ee/C.jai" },
-    { id: 2, title: "Regal", cover: regal, link: "https://linktr.ee/C.jai" },
-    { id: 3, title: "Paradigm Shift (feat. Lixxxtheprophet)", cover: paradigm, link: "https://distrokid.com/hyperfollow/cjai/paradigm-shift-feat-lixxtheprophet/" },
+    { id: 1, title: "Paradigm Shift (feat. Lixxxtheprophet)", cover: paradigm, link: "https://distrokid.com/hyperfollow/cjai/paradigm-shift-feat-lixxtheprophet/" },
+    { id: 2, title: "Highway", cover: highway, link: "https://linktr.ee/C.jai" },
+    { id: 3, title: "Regal", cover: regal, link: "https://linktr.ee/C.jai" },
   ]
 
   return (
@@ -21,17 +21,17 @@ export default function Music({ onBack }) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <div id="music-header" className="flex flex-col md:flex-row items-start md:items-center justify-start md:justify-center gap-2 md:gap-4 relative w-full">
+      <div id="music-header" className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 relative w-full">
         <motion.button
           onClick={onBack}
           className="text-[#E6E5DB] flex items-center gap-2 text-xs px-2 py-1 md:px-3 md:py-2 bg-[#1a1a1a] cursor-pointer rounded-lg border-solid border-[1px] border-transparent md:absolute md:left-0 md:text-lg"
           whileHover={{ scale: 1.05, backgroundColor: "#1a1a1aa8" }}
           whileTap={{ scale: 0.95 }}
         >
-          <ArrowLeft className="w-4 h-4 md:w-6 md:h-6"/>
+          {/* <ArrowLeft className="w-3 h-3 md:w-6 md:h-6"/> */}
           Back
         </motion.button>
-        <h1 className="text-[#E6E5DB] text-4xl font-bold">Music</h1>
+        <h1 className="text-[#E6E5DB] text-4xl font-bold">Trax</h1>
       </div>
       
       <div id="album-grid" className="grid grid-cols-1 md:grid-cols-3 gap-6">
