@@ -9,7 +9,7 @@ export default function Contact({ onBack }) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <div id="contact-header" className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 relative w-full">
+      {/* <div id="contact-header" className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 relative w-full">
         <motion.button
           onClick={onBack}
           className="text-[#E6E5DB] flex items-center gap-2 text-xs px-2 py-1 md:px-3 md:py-2 bg-[#1a1a1a] cursor-pointer rounded-lg border-solid border-[1px] border-transparent md:absolute md:left-0 md:text-lg"
@@ -19,7 +19,7 @@ export default function Contact({ onBack }) {
           Back
         </motion.button>
         <h1 className="text-[#E6E5DB] text-4xl font-bold">Contact</h1>
-      </div>
+      </div> */}
       <motion.div id="contact-form" className="flex flex-col items-center justify-center gap-4 md:px-8 w-full mt-4" initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { duration: 2 } }} exit={{ opacity: 0 }}>
         <div id="mc_embed_shell" className="flex flex-col items-center justify-center gap-4 max-w-screen">
           <link

@@ -15,7 +15,7 @@ export default function Home() {
         initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1 }}
         whileInView={{ opacity: 1 }}
       >
-        <MenuLink text="Music" />
+        <MenuLink text="Trax" />
         <MenuLink text="EPK" />
         <MenuLink text="BERi" />
         <MenuLink text="Contact" />

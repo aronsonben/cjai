@@ -21,6 +21,20 @@
   font-style: normal;
 }
 
+.crew-modern {
+  font-family: "craw-modern-urw", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.crew-modern-outline {
+  font-family: "craw-modern-urw", serif;
+  font-weight: 700;
+  font-style: normal;
+  -webkit-text-stroke: 2px #fff; /* stroke width and color */
+  color: transparent; /* makes fill transparent, so only stroke shows */
+}
+
 .bebas-neue-regular {
   font-family: "Bebas Neue", sans-serif;
   font-weight: 400;

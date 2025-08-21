@@ -21,6 +21,7 @@ export default function Music({ onBack }) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
+      {/* 
       <div id="music-header" className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 relative w-full">
         <motion.button
           onClick={onBack}
@@ -28,12 +29,13 @@ export default function Music({ onBack }) {
           whileHover={{ scale: 1.05, backgroundColor: "#1a1a1aa8" }}
           whileTap={{ scale: 0.95 }}
         >
-          {/* <ArrowLeft className="w-3 h-3 md:w-6 md:h-6"/> */}
+          {/* <ArrowLeft className="w-3 h-3 md:w-6 md:h-6"/> 
           Back
         </motion.button>
         <h1 className="text-[#E6E5DB] text-4xl font-bold">Trax</h1>
       </div>
-      
+      */}
+
       <div id="album-grid" className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {albums.map((album) => (
           <motion.a 
