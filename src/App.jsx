@@ -17,7 +17,7 @@ import './App.css'
 const FooterWithIcons = () => {
   return (
     <footer>
-      <div id="contact-icons" className="flex items-center justify-center gap-8 my-8">
+      <div id="contact-icons" className="flex items-center justify-center gap-12 my-4 md:my-8">
         {/* SVG Gradient Definition (hidden, but referenced by all icons) */}
         <svg width="0" height="0" style={{ position: "absolute" }}>
           <defs>
@@ -30,7 +30,7 @@ const FooterWithIcons = () => {
             </motion.filter>
           </defs>
         </svg>
-        <div className="w-6 h-6 md:w-6 md:h-6">
+        <div className="w-4 md:w-6 md:h-6">
           <a href="https://www.instagram.com/c.jai00/?hl=en">
             <motion.svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="url(#icon-gradient)" filter="url(#icon-shadow)" whileHover={{ scale: 1.15, transition: { duration: 0.3 } }} whileTap={{ scale: 0.95 }} initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { delay: 0 } }} exit={{ opacity: 0 }}>
               <title>Instagram</title>
@@ -38,7 +38,7 @@ const FooterWithIcons = () => {
             </motion.svg>
           </a>
         </div>
-        <div className="w-6 h-6 md:w-6 md:h-6">
+        <div className="w-4 md:w-6 md:h-6">
           <a href="https://twitter.com/_cjai00">
             <motion.svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="url(#icon-gradient)" filter="url(#icon-shadow)" whileHover={{ scale: 1.15, transition: { duration: 0.3 } }} whileTap={{ scale: 0.95 }} initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { delay: 0.2 } }} exit={{ opacity: 0 }}>
               <title>X</title>
@@ -46,7 +46,7 @@ const FooterWithIcons = () => {
             </motion.svg>
           </a>
         </div>
-        <div className="w-6 h-6 md:w-6 md:h-6">
+        <div className="w-4 md:w-6 md:h-6">
           <a href="https://open.spotify.com/album/0Nea3OUytRyX7oLLrStFqw?highlight=spotify:track:6wSciVDs4ZM3uYsuVuAwUQ">
             <motion.svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="url(#icon-gradient)" filter="url(#icon-shadow)" whileHover={{ scale: 1.15, transition: { duration: 0.3 } }} whileTap={{ scale: 0.95 }} initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { delay: 0.4 } }} exit={{ opacity: 0 }}>
               <title>Spotify</title>
@@ -54,7 +54,7 @@ const FooterWithIcons = () => {
             </motion.svg>
           </a>
         </div>
-        <div className="w-6 h-6 md:w-6 md:h-6">
+        <div className="w-4 md:w-6 md:h-6">
           <a href="https://music.apple.com/us/album/highway-single/1535534212">
             <motion.svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="url(#icon-gradient)" filter="url(#icon-shadow)" whileHover={{ scale: 1.15, transition: { duration: 0.3 } }} whileTap={{ scale: 0.95 }} initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { delay: 0.6 } }} exit={{ opacity: 0 }}>
               <title>Apple Music</title>
@@ -62,7 +62,7 @@ const FooterWithIcons = () => {
             </motion.svg>
           </a>
         </div>
-        <div className="w-6 h-6 md:w-6 md:h-6">
+        <div className="w-4 md:w-6 md:h-6">
           <a href="https://tidal.com/browse/track/17271458">
             <motion.svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="url(#icon-gradient)" filter="url(#icon-shadow)" whileHover={{ scale: 1.15, transition: { duration: 0.3 } }} whileTap={{ scale: 0.95 }} initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { delay: 0.8 } }} exit={{ opacity: 0 }}>
               <title>Tidal</title>
@@ -195,9 +195,8 @@ function App() {
           // Hide the container until the fonts are loaded
           containerRef.current.style.visibility = "visible"
 
-          const { words } = splitText(
-              containerRef.current.querySelector("h1")
-          )
+          var text = containerRef.current.querySelector("h1")
+          const { words } = splitText(containerRef.current.querySelector("h1"));
 
           // Animate the words in the h1
           animate(
@@ -246,9 +245,21 @@ function App() {
         backgroundRepeat: 'no-repeat'
       }}
     >
+      {(currentView === "home" || currentView === "epk") && (
+        <video
+          className="absolute top-0 left-0 w-full h-full object-cover"
+          autoPlay
+          loop
+          muted
+          playsInline
+          id="bg-video"
+        >
+          <source src="src/assets/cjai_texture_movement_slow.mp4" type="video/mp4" />
+        </video>
+      )}
       {/* Header Section */}
       {currentView != "epk" && (
-        <header className="w-full flex justify-center items-center p-4 pt-8 md:justify-start md:p-8">
+        <header className="z-10 w-full flex justify-center items-center p-4 pt-8 md:justify-start md:p-8">
           <div className="flex justify-center md:justify-start" ref={containerRef}>
           {/* <motion.h1
             id="cjai-brand-text"
@@ -295,7 +306,7 @@ function App() {
       )}
 
       {/* Content Section */}
-      <main className="flex-1 w-full overflow-auto">
+      <main className="z-10 flex-1 w-full overflow-auto">
         {currentView === "home" ? (
           <div id="home-container" className="flex flex-col-reverse md:flex-row w-full h-full justify-around items-center gap-4 p-4 pb-8 md:pt-0 md:p-12">
             <motion.div 
@@ -304,7 +315,7 @@ function App() {
             >
               <MenuLink text="Trax" onClick={() => setCurrentView("music")} delay={0.05} />
               <MenuLink text="EPK" onClick={() => setCurrentView("epk")} delay={0.1} />
-              <MenuLink text="BERi" href="https://erapport.club/" onClick={() => {}} delay={0.15} />
+              <MenuLink text="BERi" image={"src/assets/img/cjai_beri.png"} href="https://erapport.club/" onClick={() => {}} delay={0.15} />
               <MenuLink text="Contact" onClick={() => setCurrentView("contact")} delay={0.2} />
             </motion.div>
             <motion.div 

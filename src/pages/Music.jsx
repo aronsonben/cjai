@@ -8,7 +8,7 @@ import keys from '../assets/img/songart/cjai_keys.png'
 
 export default function Music({ onBack }) {
   const albums = [
-    { id: 1, title: "Paradigm Shift (feat. Lixxxtheprophet)", cover: paradigm, link: "https://distrokid.com/hyperfollow/cjai/paradigm-shift-feat-lixxtheprophet/" },
+    { id: 1, title: "Paradigm Shift (feat. Lixxtheprophet)", cover: paradigm, link: "https://distrokid.com/hyperfollow/cjai/paradigm-shift-feat-lixxtheprophet/" },
     { id: 2, title: "Highway", cover: highway, link: "https://linktr.ee/C.jai" },
     { id: 3, title: "Regal", cover: regal, link: "https://linktr.ee/C.jai" },
   ]

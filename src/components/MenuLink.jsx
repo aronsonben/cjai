@@ -1,6 +1,6 @@
 import { motion } from "motion/react"
 
-export const MenuLink = ({ text, href, onClick, delay }) => {
+export const MenuLink = ({ text, href, onClick, delay, image }) => {
   return (
     <motion.a
       href={href}
@@ -35,7 +35,11 @@ export const MenuLink = ({ text, href, onClick, delay }) => {
       }}
       whileTap={{ scale: 0.95 }}
     >
-      {text}
+      {image != null ? (
+        <img src={image} className="w-20" alt={text}></img>
+      ) : (
+        <span>{text}</span>
+      )}
     </motion.a>
   )
 }
