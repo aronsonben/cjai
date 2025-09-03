@@ -12,6 +12,8 @@ import headerfont2 from './assets/cjai_headerfont-retrocursive2.2.png'
 import headerfontOG from './assets/cjai_original_font.png'
 import handdrawnfont from './assets/cjai_handdrawn_font.png'
 import headerfontOGorange from './assets/cjai_original_font_org.png'
+import berilogo from './assets/img/cjai_beri.png';
+import bkgvid from './assets/cjai_texture_movement_slow.mp4';
 import './App.css'
 
 const FooterWithIcons = () => {
@@ -254,7 +256,7 @@ function App() {
           playsInline
           id="bg-video"
         >
-          <source src="src/assets/cjai_texture_movement_slow.mp4" type="video/mp4" />
+          <source src={bkgvid} type="video/mp4" />
         </video>
       )}
       {/* Header Section */}
@@ -315,7 +317,7 @@ function App() {
             >
               <MenuLink text="Trax" onClick={() => setCurrentView("music")} delay={0.05} />
               <MenuLink text="EPK" onClick={() => setCurrentView("epk")} delay={0.1} />
-              <MenuLink text="BERi" image={"src/assets/img/cjai_beri.png"} href="https://erapport.club/" onClick={() => {}} delay={0.15} />
+              <MenuLink text="BERi" image={berilogo} href="https://erapport.club/" onClick={() => {}} delay={0.15} />
               <MenuLink text="Contact" onClick={() => setCurrentView("contact")} delay={0.2} />
             </motion.div>
             <motion.div 
