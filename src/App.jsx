@@ -328,7 +328,8 @@ function App() {
               animate={{ opacity: 1 }}
               whileInView={{ opacity: 1 }}
             >
-              <YouTubeEmbed source="https://youtu.be/6KQjxq8AaS4?si=Dpr0S5IETLSh2ItX" isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
+              {/* Temp set isPlaying to true to YouTube iframe always appears instead of custom img thumbnail (Sept 25) */}
+              <YouTubeEmbed source="https://www.youtube.com/embed/6KQjxq8AaS4?si=09-FQ1QodBiTUpM0" isPlaying={true} setIsPlaying={setIsPlaying} />
             </motion.div>
           </div>
         ) : currentView === "music" ? (
