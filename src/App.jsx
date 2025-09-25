@@ -247,6 +247,7 @@ function App() {
         backgroundRepeat: 'no-repeat'
       }}
     >
+      {/* Background Video animation */}
       {(currentView === "home" || currentView === "epk") && (
         <video
           className="absolute top-0 left-0 w-full h-full object-cover"
@@ -327,7 +328,7 @@ function App() {
               animate={{ opacity: 1 }}
               whileInView={{ opacity: 1 }}
             >
-              <YouTubeEmbed source="https://www.youtube.com/embed/mbGDDGKc7Eg?si=0gZhBQ8kSms3jtmY&autoplay=1" isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
+              <YouTubeEmbed source="https://youtu.be/6KQjxq8AaS4?si=Dpr0S5IETLSh2ItX" isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
             </motion.div>
           </div>
         ) : currentView === "music" ? (
