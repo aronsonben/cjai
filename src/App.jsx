@@ -317,7 +317,7 @@ function App() {
               className="flex-1/2 flex flex-col justify-center items-center gap-8 text-4xl"
             >
               <MenuLink text="Trax" onClick={() => setCurrentView("music")} delay={0.05} />
-              <MenuLink text="EPK" onClick={() => setCurrentView("epk")} delay={0.1} />
+              <MenuLink text="EPK" href="https://cjaiproductions.wixsite.com/cjaiepk" onClick={() => {}} delay={0.1} />
               <MenuLink text="BERi" image={berilogo} href="https://erapport.club/" onClick={() => {}} delay={0.15} />
               <MenuLink text="Contact" onClick={() => setCurrentView("contact")} delay={0.2} />
             </motion.div>
