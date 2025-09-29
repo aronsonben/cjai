@@ -78,7 +78,7 @@ const FooterWithIcons = ({ onAdminClick }) => {
       </div>
       
       {/* Admin Link */}
-      <div className="text-center mt-2">
+      {/* <div className="text-center mt-2">
         <button
           onClick={onAdminClick}
           className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
@@ -86,7 +86,7 @@ const FooterWithIcons = ({ onAdminClick }) => {
         >
           Admin
         </button>
-      </div>
+      </div> */}
       
       {/* <div className="flex justify-center w-full my-4" ref={containerRef}>
         <motion.img 
