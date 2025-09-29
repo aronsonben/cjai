@@ -6,8 +6,10 @@ import Music from './pages/Music'
 import Contact from './pages/Contact'
 import EPK from './pages/EPK'
 import EPKSauce from "./pages/EPKSauce"
+import Admin from "./pages/Admin"
 import { YouTubeEmbed } from "./components/YouTubeEmbed";
 import { MenuLink } from "./components/MenuLink";
+import { getContent } from "./data/content"
 import headerfont2 from './assets/cjai_headerfont-retrocursive2.2.png'
 import headerfontOG from './assets/cjai_original_font.png'
 import handdrawnfont from './assets/cjai_handdrawn_font.png'
@@ -16,7 +18,7 @@ import berilogo from './assets/img/cjai_beri.png';
 import bkgvid from './assets/cjai_texture_movement_slow.mp4';
 import './App.css'
 
-const FooterWithIcons = () => {
+const FooterWithIcons = ({ onAdminClick }) => {
   return (
     <footer>
       <div id="contact-icons" className="flex items-center justify-center gap-12 my-4 md:my-8">
@@ -73,6 +75,18 @@ const FooterWithIcons = () => {
           </a>
         </div>
       </div>
+      
+      {/* Admin Link */}
+      <div className="text-center mt-2">
+        <button
+          onClick={onAdminClick}
+          className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
+          style={{ fontFamily: 'Palatino, serif' }}
+        >
+          Admin
+        </button>
+      </div>
+      
       {/* <div className="flex justify-center w-full my-4" ref={containerRef}>
         <motion.img 
           src={handdrawnfont} 
@@ -118,21 +132,24 @@ function SplitText() {
           // Hide the container until the fonts are loaded
           containerRef.current.style.visibility = "visible"
 
-          const { words } = splitText(
-              containerRef.current.querySelector("h1")
-          )
+          console.log("Found h1: ", containerRef.current.querySelector("h1"));
+          if(containerRef.current.querySelector("h1")) {
+            const { words } = splitText(
+                containerRef.current.querySelector("h1")
+            )
 
-          // Animate the words in the h1
-          animate(
-              words,
-              { opacity: [0, 1], y: [10, 0] },
-              {
-                  type: "spring",
-                  duration: 2,
-                  bounce: 0,
-                  delay: stagger(0.05),
-              }
-          )
+            // Animate the words in the h1
+            animate(
+                words,
+                { opacity: [0, 1], y: [10, 0] },
+                {
+                    type: "spring",
+                    duration: 2,
+                    bounce: 0,
+                    delay: stagger(0.05),
+                }
+            )
+          }
       })
   }, [])
 
@@ -186,33 +203,38 @@ const HeaderStyle = ({ type }) => {
 }
 
 function App() {
-  const [currentView, setCurrentView] = useState("home");
+  const [currentView, setCurrentView] = useState(() => {
+    // Check for admin route on initial load
+    return window.location.pathname === '/admin' ? 'admin' : 'home';
+  });
   const [isPlaying, setIsPlaying] = useState(false);
+  const [content, setContent] = useState(getContent());
   const containerRef = useRef(null)
 
+  // Handle browser navigation (back/forward buttons)
   useEffect(() => {
-      document.fonts.ready.then(() => {
-          if (!containerRef.current) return
+    const handlePopState = () => {
+      setCurrentView(window.location.pathname === '/admin' ? 'admin' : 'home');
+    };
 
-          // Hide the container until the fonts are loaded
-          containerRef.current.style.visibility = "visible"
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
-          var text = containerRef.current.querySelector("h1")
-          const { words } = splitText(containerRef.current.querySelector("h1"));
+  // Update URL when view changes
+  useEffect(() => {
+    const path = currentView === 'admin' ? '/admin' : '/';
+    if (window.location.pathname !== path) {
+      window.history.pushState({}, '', path);
+    }
+  }, [currentView]);
 
-          // Animate the words in the h1
-          animate(
-              words,
-              { opacity: [0, 1], x: [-50, 0] },
-              {
-                  type: "spring",
-                  duration: 2,
-                  bounce: 0,
-                  delay: stagger(0.05),
-              }
-          )
-      })
-  }, [])
+  // Refresh content when returning from admin
+  useEffect(() => {
+    if (currentView !== 'admin') {
+      setContent(getContent());
+    }
+  }, [currentView]);
 
   const shape = {
     strokeWidth: 3,
@@ -264,38 +286,6 @@ function App() {
       {currentView != "epk" && (
         <header className="z-10 w-full flex justify-center items-center p-4 pt-8 md:justify-start md:p-8">
           <div className="flex justify-center md:justify-start" ref={containerRef}>
-          {/* <motion.h1
-            id="cjai-brand-text"
-            className="!text-[84px] md:!text-[84px]"
-            style={{ 
-              fontFamily: 'Hoper Begin',
-              color: '#E6E5DB',
-              letterSpacing: '0.1em',
-              filter: 'drop-shadow(4px 4px 1px #D8572A)' 
-            }}
-            whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
-            whileTap={{ scale: 0.95 }}
-            >
-              C.Jai
-            </motion.h1> */}
-            {/* <motion.svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 100 20"
-              className="absolute w-[25%] top-[15%] left-[57%] md:absolute md:w-[10%] md:top-[12%] md:left-[21%] squiggly-line"
-              initial="hidden"
-              animate="visible"
-            >
-              <motion.path
-                d="M0 10 Q 25 0, 50 10 T 100 10"
-                fill="transparent"
-                stroke="#D8572A"
-                strokeWidth="2"
-                strokeLinecap="round"
-                variants={draw}
-                custom={1}
-                style={shape}
-              />
-            </motion.svg> */}
             <motion.img 
               src={handdrawnfont} 
               alt="C.Jai Header" 
@@ -310,16 +300,24 @@ function App() {
 
       {/* Content Section */}
       <main className="z-10 flex-1 w-full overflow-auto">
-        {currentView === "home" ? (
+        {currentView === "admin" ? (
+          <Admin onBack={() => setCurrentView("home")} />
+        ) : currentView === "home" ? (
           <div id="home-container" className="flex flex-col-reverse md:flex-row w-full h-full justify-around items-center gap-4 p-4 pb-8 md:pt-0 md:p-12">
             <motion.div 
               id="text-menu" 
               className="flex-1/2 flex flex-col justify-center items-center gap-8 text-4xl"
             >
-              <MenuLink text="Trax" onClick={() => setCurrentView("music")} delay={0.05} />
-              <MenuLink text="EPK" href="https://cjaiproductions.wixsite.com/cjaiepk" onClick={() => {}} delay={0.1} />
-              <MenuLink text="BERi" image={berilogo} href="https://erapport.club/" onClick={() => {}} delay={0.15} />
-              <MenuLink text="Contact" onClick={() => setCurrentView("contact")} delay={0.2} />
+              {content.navigation.menuItems.map((item, index) => (
+                <MenuLink 
+                  key={item.id}
+                  text={item.text} 
+                  onClick={item.type === 'internal' ? () => setCurrentView(item.target) : () => {}} 
+                  href={item.type === 'external' ? item.href : undefined}
+                  image={item.image ? item.image : undefined}
+                  delay={0.05 * (index + 1)} 
+                />
+              ))}
             </motion.div>
             <motion.div 
               id="youtube-embed" 
@@ -329,7 +327,7 @@ function App() {
               whileInView={{ opacity: 1 }}
             >
               {/* Temp set isPlaying to true to YouTube iframe always appears instead of custom img thumbnail (Sept 25) */}
-              <YouTubeEmbed source="https://www.youtube.com/embed/6KQjxq8AaS4?si=09-FQ1QodBiTUpM0" isPlaying={true} setIsPlaying={setIsPlaying} />
+              <YouTubeEmbed source={content.homeVideo.youtubeUrl} isPlaying={true} setIsPlaying={setIsPlaying} />
             </motion.div>
           </div>
         ) : currentView === "music" ? (
@@ -346,8 +344,8 @@ function App() {
       </main>
 
       {/* Footer with Social Icons */}
-      {currentView !== "epk" && (
-        <FooterWithIcons />
+      {currentView !== "epk" && currentView !== "admin" && (
+        <FooterWithIcons onAdminClick={() => setCurrentView("admin")} />
       )}
     </div>
   )

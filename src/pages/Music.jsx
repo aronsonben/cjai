@@ -1,17 +1,14 @@
 import { motion } from "motion/react";
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { ArrowLeft } from "lucide-react"
-import highway from '../assets/img/songart/cjai_highway.jpeg'
-import regal from '../assets/img/songart/cjai_regal.png'
-import paradigm from '../assets/img/songart/cjai_paradigm.jpg'
-import keys from '../assets/img/songart/cjai_keys.png'
+import { getContent } from "../data/content"
 
 export default function Music({ onBack }) {
-  const albums = [
-    { id: 1, title: "Paradigm Shift (feat. Lixxtheprophet)", cover: paradigm, link: "https://distrokid.com/hyperfollow/cjai/paradigm-shift-feat-lixxtheprophet/" },
-    { id: 2, title: "Highway", cover: highway, link: "https://linktr.ee/C.jai" },
-    { id: 3, title: "Regal", cover: regal, link: "https://linktr.ee/C.jai" },
-  ]
+  const [content, setContent] = useState({ musicItems: [] });
+
+  useEffect(() => {
+    setContent(getContent());
+  }, []);
 
   return (
     <motion.div
@@ -37,10 +34,10 @@ export default function Music({ onBack }) {
       */}
 
       <div id="album-grid" className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {albums.map((album) => (
+        {content.musicItems.map((item) => (
           <motion.a 
-            key={album.id} 
-            href={album.link} 
+            key={item.id} 
+            href={item.link} 
             target="_blank" 
             rel="noopener noreferrer" 
             className="flex flex-col items-center gap-2"
@@ -48,8 +45,8 @@ export default function Music({ onBack }) {
             animate={{ opacity: 1 }}
           >
             <motion.img 
-              src={album.cover} 
-              alt={album.title} 
+              src={item.cover} 
+              alt={item.title} 
               className="w-full h-auto object-cover rounded-lg shadow-lg"
               initial={{ opacity: 0 }} 
               animate={{ opacity: 1 }}
@@ -59,7 +56,7 @@ export default function Music({ onBack }) {
                 transition: { duration: 0.3 }
               }}
             />
-            <h2 className="text-[#E6E5DB] text-center text-2xl">{album.title}</h2>
+            <h2 className="text-[#E6E5DB] text-center text-2xl">{item.title}</h2>
           </motion.a>
         ))}
       </div>
