@@ -3,6 +3,15 @@ import { useState, useEffect } from "react";
 import { useAdmin } from "../hooks/useAdmin";
 import { getContent, saveContent, resetContent, generateId } from "../data/content";
 import { 
+  getAvailableImageKeys, 
+  getUploadedImages, 
+  uploadImage, 
+  deleteUploadedImage,
+  getImageInfo,
+  validateImageKey,
+  getImage 
+} from "../utils/imageRegistry";
+import { 
   X, 
   Plus, 
   Trash2, 
@@ -229,6 +238,35 @@ const MenuItemsEditor = ({ content, setContent }) => {
                   </select>
                 </div>
               )}
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Image (Optional)
+                </label>
+                <select
+                  value={item.imageKey || ''}
+                  onChange={(e) => updateMenuItem(item.id, 'imageKey', e.target.value || undefined)}
+                  className="w-full p-3 border border-gray-300 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">No Image</option>
+                  {getAvailableImageKeys().map((key) => (
+                    <option key={key} value={key}>{key}</option>
+                  ))}
+                </select>
+                {item.imageKey && (
+                  <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+                    <p className="text-sm text-gray-600 mb-2">Preview:</p>
+                    <img 
+                      src={getImage(item.imageKey)} 
+                      alt={item.imageKey}
+                      className="max-w-32 max-h-32 object-cover rounded border"
+                    />
+                  </div>
+                )}
+                <p className="text-sm text-gray-600 mt-2">
+                  💡 Select an image to display instead of text for this menu item. Upload new images in the Images tab.
+                </p>
+              </div>
             </div>
           </div>
         ))}
@@ -268,13 +306,227 @@ const VideoEditor = ({ content, setContent }) => {
   );
 };
 
+// Images Manager Component
+const ImagesManager = () => {
+  const [uploadedImages, setUploadedImages] = useState({});
+  const [uploadStatus, setUploadStatus] = useState('');
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [newImageName, setNewImageName] = useState('');
+  const [uploading, setUploading] = useState(false);
+
+  // Load uploaded images
+  useEffect(() => {
+    setUploadedImages(getUploadedImages());
+  }, []);
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      // Auto-generate name from filename
+      const nameWithoutExtension = file.name.replace(/\.[^/.]+$/, "");
+      const cleanName = nameWithoutExtension.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase();
+      setNewImageName(cleanName);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!selectedFile) {
+      setUploadStatus('❌ Please select a file first');
+      return;
+    }
+
+    const nameValidation = validateImageKey(newImageName);
+    if (!nameValidation.valid) {
+      setUploadStatus(`❌ ${nameValidation.error}`);
+      return;
+    }
+
+    // Check if name already exists
+    if (getAvailableImageKeys().includes(newImageName)) {
+      setUploadStatus('❌ An image with this name already exists');
+      return;
+    }
+
+    setUploading(true);
+    try {
+      await uploadImage(selectedFile, newImageName);
+      setUploadedImages(getUploadedImages());
+      setSelectedFile(null);
+      setNewImageName('');
+      setUploadStatus('✅ Image uploaded successfully!');
+      // Reset file input
+      document.getElementById('image-upload-input').value = '';
+    } catch (error) {
+      setUploadStatus(`❌ ${error.message}`);
+    } finally {
+      setUploading(false);
+    }
+
+    setTimeout(() => setUploadStatus(''), 3000);
+  };
+
+  const handleDelete = async (imageName) => {
+    if (confirm(`Are you sure you want to delete "${imageName}"? This action cannot be undone.`)) {
+      const success = deleteUploadedImage(imageName);
+      if (success) {
+        setUploadedImages(getUploadedImages());
+        setUploadStatus('🗑️ Image deleted successfully');
+      } else {
+        setUploadStatus('❌ Failed to delete image');
+      }
+      setTimeout(() => setUploadStatus(''), 3000);
+    }
+  };
+
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
+  return (
+    <div className="space-y-6 font-sans">
+      <h3 className="text-xl font-semibold text-gray-800">Image Management</h3>
+      
+      {/* Upload Section */}
+      <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+        <h4 className="text-lg font-medium text-gray-700 mb-4">Upload New Image</h4>
+        
+        {uploadStatus && (
+          <div className="mb-4 p-3 bg-blue-50 text-blue-800 rounded-md">
+            {uploadStatus}
+          </div>
+        )}
+
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Select Image File
+            </label>
+            <input
+              id="image-upload-input"
+              type="file"
+              accept="image/*"
+              onChange={handleFileSelect}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <p className="text-sm text-gray-600 mt-2">
+              💡 Supported formats: JPG, PNG, GIF, WebP. Max size: 5MB
+            </p>
+          </div>
+
+          {selectedFile && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Image Name (Key)
+              </label>
+              <input
+                type="text"
+                value={newImageName}
+                onChange={(e) => setNewImageName(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                placeholder="image_name"
+              />
+              <p className="text-sm text-gray-600 mt-2">
+                💡 Use letters, numbers, underscores, and hyphens only. This will be the key used in your content.
+              </p>
+            </div>
+          )}
+
+          <button
+            onClick={handleUpload}
+            disabled={!selectedFile || !newImageName || uploading}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <Upload size={18} />
+            {uploading ? 'Uploading...' : 'Upload Image'}
+          </button>
+        </div>
+      </div>
+
+      {/* Uploaded Images Grid */}
+      <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+        <div className="flex justify-between items-center mb-4">
+          <h4 className="text-lg font-medium text-gray-700">Your Uploaded Images</h4>
+          <span className="text-sm text-gray-500">
+            {Object.keys(uploadedImages).length} image(s)
+          </span>
+        </div>
+
+        {Object.keys(uploadedImages).length === 0 ? (
+          <p className="text-gray-500 text-center py-8">
+            No uploaded images yet. Upload your first image above!
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {Object.entries(uploadedImages).map(([key, imageData]) => (
+              <div key={key} className="border border-gray-200 rounded-lg overflow-hidden">
+                <div className="aspect-square">
+                  <img 
+                    src={imageData.data} 
+                    alt={imageData.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="p-3">
+                  <div className="flex justify-between items-start mb-2">
+                    <h5 className="font-medium text-gray-800 truncate">{key}</h5>
+                    <button
+                      onClick={() => handleDelete(key)}
+                      className="p-1 text-red-600 hover:bg-red-50 rounded transition-colors"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                  <div className="text-xs text-gray-500 space-y-1">
+                    <p>Size: {formatFileSize(imageData.size)}</p>
+                    <p>Uploaded: {new Date(imageData.uploadedAt).toLocaleDateString()}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Built-in Images */}
+      <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+        <h4 className="text-lg font-medium text-gray-700 mb-4">Built-in Images</h4>
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+          {Object.keys({
+            'cjai_beri': true,
+            'cjai_paradigm': true,
+            'cjai_highway': true,
+            'cjai_regal': true,
+            'cjai_keys': true
+          }).map((key) => (
+            <div key={key} className="text-center">
+              <div className="aspect-square bg-gray-100 rounded-lg mb-2 overflow-hidden">
+                <img 
+                  src={getImage(key)} 
+                  alt={key}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <p className="text-xs text-gray-600">{key}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Music Items Editor Component
 const MusicItemsEditor = ({ content, setContent }) => {
   const addMusicItem = () => {
     const newItem = {
       id: generateId(),
       title: "New Song",
-      cover: "/src/assets/img/songart/cjai_paradigm.jpg",
+      coverKey: "cjai_paradigm",
       link: "https://example.com"
     };
     setContent({
@@ -343,17 +595,30 @@ const MusicItemsEditor = ({ content, setContent }) => {
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Cover Image Path
+                  Cover Image
                 </label>
-                <input
-                  type="text"
-                  value={item.cover}
-                  onChange={(e) => updateMusicItem(item.id, 'cover', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-                  placeholder="/src/assets/img/songart/song.jpg"
-                />
+                <select
+                  value={item.coverKey || ''}
+                  onChange={(e) => updateMusicItem(item.id, 'coverKey', e.target.value)}
+                  className="w-full p-3 border border-gray-300 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Select an image</option>
+                  {getAvailableImageKeys().map((key) => (
+                    <option key={key} value={key}>{key}</option>
+                  ))}
+                </select>
+                {item.coverKey && (
+                  <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+                    <p className="text-sm text-gray-600 mb-2">Preview:</p>
+                    <img 
+                      src={getImage(item.coverKey)} 
+                      alt={item.coverKey}
+                      className="max-w-48 max-h-48 object-cover rounded border"
+                    />
+                  </div>
+                )}
                 <p className="text-sm text-gray-600 mt-2">
-                  💡 Use the path to images in the assets/img/songart folder
+                  💡 Select from available images or upload new ones in the Images tab
                 </p>
               </div>
               
@@ -461,7 +726,8 @@ export default function Admin({ onBack }) {
   const tabs = [
     { id: 'menu', label: 'Menu Items', component: MenuItemsEditor },
     { id: 'video', label: 'Home Video', component: VideoEditor },
-    { id: 'music', label: 'Music Items', component: MusicItemsEditor }
+    { id: 'music', label: 'Music Items', component: MusicItemsEditor },
+    { id: 'images', label: 'Images', component: ImagesManager }
   ];
 
   const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component;

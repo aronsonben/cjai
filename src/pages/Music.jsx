@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import { useState, useEffect } from "react"
 import { ArrowLeft } from "lucide-react"
 import { getContent } from "../data/content"
+import { getImage } from "../utils/imageRegistry"
 
 export default function Music({ onBack }) {
   const [content, setContent] = useState({ musicItems: [] });
@@ -45,7 +46,7 @@ export default function Music({ onBack }) {
             animate={{ opacity: 1 }}
           >
             <motion.img 
-              src={item.cover} 
+              src={getImage(item.coverKey)} 
               alt={item.title} 
               className="w-full h-auto object-cover rounded-lg shadow-lg"
               initial={{ opacity: 0 }} 

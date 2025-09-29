@@ -19,7 +19,7 @@ export const defaultContent = {
         text: "BERi", 
         type: "external", 
         href: "https://erapport.club/", 
-        image: "/src/assets/img/cjai_beri.png" 
+        imageKey: "cjai_beri" 
       },
       { 
         id: 4, 
@@ -36,19 +36,19 @@ export const defaultContent = {
     { 
       id: 1, 
       title: "Paradigm Shift (feat. Lixxtheprophet)", 
-      cover: "/src/assets/img/songart/cjai_paradigm.jpg", 
+      coverKey: "cjai_paradigm", 
       link: "https://distrokid.com/hyperfollow/cjai/paradigm-shift-feat-lixxtheprophet/" 
     },
     { 
       id: 2, 
       title: "Highway", 
-      cover: "/src/assets/img/songart/cjai_highway.jpeg", 
+      coverKey: "cjai_highway", 
       link: "https://linktr.ee/C.jai" 
     },
     { 
       id: 3, 
       title: "Regal", 
-      cover: "/src/assets/img/songart/cjai_regal.png", 
+      coverKey: "cjai_regal", 
       link: "https://linktr.ee/C.jai" 
     }
   ]

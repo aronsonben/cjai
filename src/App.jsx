@@ -10,6 +10,7 @@ import Admin from "./pages/Admin"
 import { YouTubeEmbed } from "./components/YouTubeEmbed";
 import { MenuLink } from "./components/MenuLink";
 import { getContent } from "./data/content"
+import { getImage } from "./utils/imageRegistry"
 import headerfont2 from './assets/cjai_headerfont-retrocursive2.2.png'
 import headerfontOG from './assets/cjai_original_font.png'
 import handdrawnfont from './assets/cjai_handdrawn_font.png'
@@ -304,20 +305,23 @@ function App() {
           <Admin onBack={() => setCurrentView("home")} />
         ) : currentView === "home" ? (
           <div id="home-container" className="flex flex-col-reverse md:flex-row w-full h-full justify-around items-center gap-4 p-4 pb-8 md:pt-0 md:p-12">
+            {/* <p>{getImage('cjai_beri')}</p> */}
             <motion.div 
               id="text-menu" 
               className="flex-1/2 flex flex-col justify-center items-center gap-8 text-4xl"
             >
-              {content.navigation.menuItems.map((item, index) => (
+              {content.navigation.menuItems.map((item, index) => {
+                console.log("outputting content images: ", item);
+                return (
                 <MenuLink 
                   key={item.id}
                   text={item.text} 
                   onClick={item.type === 'internal' ? () => setCurrentView(item.target) : () => {}} 
                   href={item.type === 'external' ? item.href : undefined}
-                  image={item.image ? item.image : undefined}
+                  image={item.imageKey ? getImage(item.imageKey) : undefined}
                   delay={0.05 * (index + 1)} 
                 />
-              ))}
+              )})}
             </motion.div>
             <motion.div 
               id="youtube-embed" 
