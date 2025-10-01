@@ -9,7 +9,8 @@ import {
   deleteUploadedImage,
   getImageInfo,
   validateImageKey,
-  getImage 
+  getImage,
+  updateFavicon 
 } from "../utils/imageRegistry";
 import { 
   X, 
@@ -299,6 +300,106 @@ const VideoEditor = ({ content, setContent }) => {
             <p className="text-sm text-gray-600 mt-2">
               💡 Use the embed URL format (youtube.com/embed/...), not the regular YouTube URL
             </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Favicon Editor Component
+const FaviconEditor = ({ content, setContent }) => {
+  const [previewUrl, setPreviewUrl] = useState('');
+
+  useEffect(() => {
+    if (content.favicon?.imageKey) {
+      const imageUrl = getImage(content.favicon.imageKey);
+      setPreviewUrl(imageUrl);
+    } else {
+      setPreviewUrl('');
+    }
+  }, [content.favicon?.imageKey]);
+
+  const handleFaviconChange = (imageKey) => {
+    const newContent = {
+      ...content,
+      favicon: { imageKey: imageKey || null }
+    };
+    setContent(newContent);
+    
+    // Immediately update the favicon in the browser
+    import('../utils/imageRegistry').then(({ updateFavicon }) => {
+      updateFavicon(imageKey);
+    });
+  };
+
+  return (
+    <div className="space-y-6 font-sans">
+      <h3 className="text-xl font-semibold text-gray-800">Website Favicon</h3>
+      <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Select Favicon Image
+            </label>
+            <select
+              value={content.favicon?.imageKey || ''}
+              onChange={(e) => handleFaviconChange(e.target.value)}
+              className="w-full p-3 border border-gray-300 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Use Default Favicon</option>
+              {getAvailableImageKeys().map((key) => (
+                <option key={key} value={key}>{key}</option>
+              ))}
+            </select>
+            <p className="text-sm text-gray-600 mt-2">
+              💡 Select an image to use as the website's favicon. The image will be automatically resized by the browser.
+            </p>
+          </div>
+
+          {/* Preview Section */}
+          {previewUrl && (
+            <div className="border-t pt-4">
+              <h4 className="text-sm font-medium text-gray-700 mb-3">Current Favicon Preview</h4>
+              <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-8 h-8 border border-gray-300 rounded overflow-hidden bg-white flex items-center justify-center">
+                    <img 
+                      src={previewUrl} 
+                      alt="Favicon preview"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <span className="text-xs text-gray-600">16x16 (actual size)</span>
+                </div>
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-12 h-12 border border-gray-300 rounded overflow-hidden bg-white flex items-center justify-center">
+                    <img 
+                      src={previewUrl} 
+                      alt="Favicon preview"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <span className="text-xs text-gray-600">32x32 (enlarged)</span>
+                </div>
+                <div className="flex-1 text-sm text-gray-600">
+                  <p className="font-medium mb-1">Using image: {content.favicon.imageKey}</p>
+                  <p>This image will appear in browser tabs, bookmarks, and when users save your site to their home screen.</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Instructions */}
+          <div className="border-t pt-4">
+            <h4 className="text-sm font-medium text-gray-700 mb-2">Tips for Best Results</h4>
+            <ul className="text-sm text-gray-600 space-y-1">
+              <li>• Square images work best (1:1 aspect ratio)</li>
+              <li>• Simple, high-contrast designs are more recognizable at small sizes</li>
+              <li>• The image will be automatically scaled to 16x16 and 32x32 pixels</li>
+              <li>• Changes take effect immediately - check your browser tab!</li>
+              <li>• You can upload new images in the Images tab if needed</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -726,6 +827,7 @@ export default function Admin({ onBack }) {
   const tabs = [
     { id: 'menu', label: 'Menu Items', component: MenuItemsEditor },
     { id: 'video', label: 'Home Video', component: VideoEditor },
+    { id: 'favicon', label: 'Favicon', component: FaviconEditor },
     { id: 'music', label: 'Music Items', component: MusicItemsEditor },
     { id: 'images', label: 'Images', component: ImagesManager }
   ];

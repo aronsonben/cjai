@@ -151,3 +151,54 @@ export const validateImageKey = (key) => {
   
   return { valid: true }
 }
+
+// Favicon management functions
+export const updateFavicon = (imageKey) => {
+  try {
+    // Remove existing favicon links
+    const existingFavicons = document.querySelectorAll('link[rel*="icon"]')
+    existingFavicons.forEach(link => link.remove())
+
+    if (!imageKey) {
+      // Reset to default favicon if no imageKey provided
+      return true
+    }
+
+    const imageUrl = getImage(imageKey)
+    if (!imageUrl) {
+      console.error('Favicon image not found:', imageKey)
+      return false
+    }
+
+    // Create new favicon link element
+    const faviconLink = document.createElement('link')
+    faviconLink.rel = 'icon'
+    faviconLink.type = 'image/x-icon'
+    faviconLink.href = imageUrl
+
+    // Add the favicon to the document head
+    document.head.appendChild(faviconLink)
+    
+    // Also add a shortcut icon for better browser compatibility
+    const shortcutLink = document.createElement('link')
+    shortcutLink.rel = 'shortcut icon'
+    shortcutLink.href = imageUrl
+    document.head.appendChild(shortcutLink)
+
+    return true
+  } catch (error) {
+    console.error('Error updating favicon:', error)
+    return false
+  }
+}
+
+// Get current favicon image key from content
+export const getCurrentFaviconKey = () => {
+  try {
+    const content = JSON.parse(localStorage.getItem('cjai-content') || '{}')
+    return content.favicon?.imageKey || null
+  } catch (error) {
+    console.error('Error getting current favicon key:', error)
+    return null
+  }
+}

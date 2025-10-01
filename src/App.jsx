@@ -10,7 +10,7 @@ import Admin from "./pages/Admin"
 import { YouTubeEmbed } from "./components/YouTubeEmbed";
 import { MenuLink } from "./components/MenuLink";
 import { getContent } from "./data/content"
-import { getImage } from "./utils/imageRegistry"
+import { getImage, updateFavicon } from "./utils/imageRegistry"
 import headerfont2 from './assets/cjai_headerfont-retrocursive2.2.png'
 import headerfontOG from './assets/cjai_original_font.png'
 import handdrawnfont from './assets/cjai_handdrawn_font.png'
@@ -236,6 +236,14 @@ function App() {
       setContent(getContent());
     }
   }, [currentView]);
+
+  // Initialize favicon on app load
+  useEffect(() => {
+    const currentContent = getContent();
+    if (currentContent.favicon?.imageKey) {
+      updateFavicon(currentContent.favicon.imageKey);
+    }
+  }, []);
 
   const shape = {
     strokeWidth: 3,

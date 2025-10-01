@@ -32,6 +32,9 @@ export const defaultContent = {
   homeVideo: {
     youtubeUrl: "https://www.youtube.com/embed/6KQjxq8AaS4?si=09-FQ1QodBiTUpM0"
   },
+  favicon: {
+    imageKey: null // Default to no custom favicon
+  },
   musicItems: [
     { 
       id: 1, 
